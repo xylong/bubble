@@ -1,7 +1,12 @@
 package main
 
-import "fmt"
+import (
+	"bubble/routes"
+	"github.com/xylong/bingo"
+)
 
 func main() {
-	fmt.Println("你好 world")
+	bingo.Init().
+		Mount("v1", routes.Controllers...)().
+		Lunch(8080)
 }
