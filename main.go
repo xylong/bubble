@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bubble/bootstrap"
 	config2 "bubble/config"
 	"bubble/pkg/config"
 	"bubble/routes"
@@ -19,6 +20,8 @@ func main() {
 	flag.StringVar(&env, "env", "", "加载 .env 文件，如 --env=testing 加载的是 .env.testing 文件")
 	flag.Parse()
 	config.InitConfig(env)
+
+	bootstrap.SetupDB()
 
 	bingo.Init().
 		Mount("v1", routes.Controllers...)().
