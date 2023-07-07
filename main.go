@@ -22,6 +22,7 @@ func main() {
 	config.InitConfig(env)
 
 	bootstrap.SetupDB()
+	bootstrap.SetupLogger()
 
 	bingo.Init().
 		Mount("v1", routes.Controllers...)().
