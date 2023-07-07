@@ -24,20 +24,25 @@ func (c *SignupController) Name() string {
 func (c *SignupController) Route(group *bingo.Group) {
 	group.Group("auth", func(auth *bingo.Group) {
 		auth.POST("/signup/phone/exist", c.IsPhoneExist)
+		auth.POST("/signup/email/exist", c.IsEmailExist)
 	})
 }
 
 func (c *SignupController) IsPhoneExist(ctx *gin.Context) interface{} {
 	// 解析请求参数
 	request := &requests.SignupPhoneExistRequest{}
-	if err := ctx.ShouldBind(request); err != nil {
-		return err.Error()
-	}
-
-	// 表单验证
-	if errs := requests.ValidateSignupPhoneExist(request, ctx); len(errs) > 0 {
-		return errs
+	if result, ok := requests.Validate(ctx, request, requests.ValidateSignupPhoneExist); !ok {
+		return result
 	}
 
 	return user.IsPhoneExist(request.Phone)
+}
+
+func (c *SignupController) IsEmailExist(ctx *gin.Context) interface{} {
+	request := &requests.SignupEmailExistRequest{}
+	if result, ok := requests.Validate(ctx, request, requests.ValidateSignupEmailExist); !ok {
+		return result
+	}
+
+	return user.IsEmailExist(request.Email)
 }
